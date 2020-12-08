@@ -9,7 +9,7 @@ const {
 const login = async (username, password) => {
     username = escape(username)
 
-    // 生成加密密码
+    // // 生成加密密码
     password = genPassword(password)
     password = escape(password)
     console.log('password----', password)
