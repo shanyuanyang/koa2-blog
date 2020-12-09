@@ -10,13 +10,14 @@ const redisStore = require('koa-redis')
 const path = require('path')
 const fs = require('fs')
 const morgan = require('koa-morgan')
-
+let cors = require('koa2-cors');
 
 const index = require('./routes/index')
 const users = require('./routes/users')
 const blog = require('./routes/blog')
 const user = require('./routes/user')
 const drama = require('./routes/drama')
+
 
 const {
   REDIS_CONF
@@ -33,6 +34,7 @@ app.use(bodyparser({
 app.use(json())
 app.use(logger())
 app.use(require('koa-static')(__dirname + '/public'))
+// app.use(cors());
 
 app.use(views(__dirname + '/views', {
   extension: 'ejs'
@@ -43,8 +45,15 @@ app.use(async (ctx, next) => {
   const start = new Date()
   await next()
   const ms = new Date() - start
-  // console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
+  // console.log(`11111111111--------${ctx.method} ${ctx.url} - ${ms}ms`)
 })
+
+// // 处理跨域
+// app.use(async (ctx, next) => {
+//   console.log('解决跨域请求')
+//   ctx.set("Access-Control-Allow-Origin", "*")
+//   await next()
+// })
 
 const ENV = process.env.NODE_ENV
 if (ENV !== 'production') {
@@ -76,7 +85,6 @@ app.use(session({
     all: `${REDIS_CONF.host}:${REDIS_CONF.port}`
   })
 }))
-console.log(1111111111111111111111)
 
 
 // routes
@@ -87,7 +95,7 @@ app.use(user.routes(), user.allowedMethods())
 app.use(drama.routes(), drama.allowedMethods())
 // error-handling
 app.on('error', (err, ctx) => {
-  // console.error('server error', err, ctx)
+  console.error('server error', err, ctx)
 });
 
 module.exports = app

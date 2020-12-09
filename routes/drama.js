@@ -9,10 +9,12 @@ const { getDramaList } = require('../controller/drama')
 router.prefix('/drama')
 
 router.get('/list', async function (ctx, next) {
-  console.log(222222222222222222222222222)
+  // console.log(222222222222222222222222222)
   const keyword = ctx.query.keyword || '';
   const data = await getDramaList(keyword);
-  ctx.body = new SuccessModel(data)
+  const msg = '成功'
+  // console.log('data-------', data)
+  ctx.body = new SuccessModel(data, msg)
 })
 
 
